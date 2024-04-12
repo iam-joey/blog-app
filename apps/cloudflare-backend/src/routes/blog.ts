@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client/edge";
 import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
+
 import { Hono } from "hono";
 import { verify } from "hono/jwt";
-import { z } from "zod";
 interface User {
   id: string;
   email: string;
@@ -112,6 +113,19 @@ blog.get("/:blogID", async (c) => {
 
 blog.get("/userPosts", async (c) => {
   try {
+    const user = c.get("user");
+    const prisma = c.get("prisma");
+    const userPosts = await prisma.post.findMany({
+      where: {
+        authorId: user.id,
+      },
+    });
+
+    c.status(201);
+    return c.json({
+      msg: "successfully fetched",
+      data: userPosts,
+    });
   } catch (error) {
     c.status(403);
     return c.json({
@@ -119,5 +133,41 @@ blog.get("/userPosts", async (c) => {
     });
   }
 });
+
+blog.put(
+  "/:blogID",
+  zValidator(
+    "json",
+    z.object({
+      title: z.string().optional(),
+      content: z.string().optional(),
+      published: z.boolean().optional(),
+    })
+  ),
+  async (c) => {
+    try {
+      const prisma = c.get("prisma");
+      const blogId = c.req.param("blogID");
+      const body = c.req.valid("json");
+      const post = await prisma.post.update({
+        where: {
+          id: blogId,
+        },
+        data: {
+          title: body.title,
+          content: body.content,
+          published: body.published,
+        },
+      });
+
+      return c.json({
+        post,
+      });
+    } catch (error) {
+      c.status(403);
+      return c.json({ err: "something went wrong" });
+    }
+  }
+);
 
 export default blog;

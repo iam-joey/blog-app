@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import blog from "./routes/blog";
 import user from "./routes/user";
+import { cors } from "hono/cors";
 
 const app = new Hono<{
   Bindings: {
@@ -12,6 +13,8 @@ const app = new Hono<{
     prisma: PrismaClient;
   };
 }>();
+
+app.use(cors());
 
 app.use("*", async (c, next) => {
   const prisma = new PrismaClient({
