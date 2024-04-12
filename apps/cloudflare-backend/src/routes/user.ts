@@ -18,7 +18,7 @@ user.post(
     "json",
     z.object({
       email: z.string(),
-      password: z.string(),
+      name: z.string(),
     })
   ),
   async (c) => {
@@ -41,11 +41,13 @@ user.post(
         data: {
           email: body.email,
           password,
+          name: body.name,
         },
       });
       c.status(201);
       return c.json({
         msg: "User created successfully",
+        data: user,
       });
     } catch (error) {
       c.status(403);
