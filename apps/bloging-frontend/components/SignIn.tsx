@@ -31,7 +31,6 @@ export function SignIn() {
         email: emailRef.current,
         redirect: false,
       });
-      console.log(res);
       if (!res?.ok) {
         toast.error(res?.error);
         return;

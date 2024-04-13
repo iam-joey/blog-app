@@ -23,14 +23,19 @@ user.post(
   ),
   async (c) => {
     try {
+      console.log("here 1");
       const prisma = c.get("prisma");
       const body = await c.req.valid("json");
       let password = Math.random().toString();
+      console.log("here 2");
+      console.log(body);
       const find = await prisma.user.findUnique({
         where: {
           email: body.email,
         },
       });
+      console.log("here 3");
+
       if (find) {
         c.status(403);
         return c.json({
@@ -50,6 +55,7 @@ user.post(
         data: user,
       });
     } catch (error) {
+      console.log(error);
       c.status(403);
       return c.json({ error: "error while signing up" });
     }

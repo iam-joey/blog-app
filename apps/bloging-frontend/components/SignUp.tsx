@@ -61,16 +61,14 @@ export function SignUp() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
-            <div className="grid">
-              <div className="">
-                <Label htmlFor="first-name">First name</Label>
-                <Input
-                  onChange={(e) => handleInputChange(e, nameRef)}
-                  id="first-name"
-                  placeholder="Enter Your name"
-                  required
-                />
-              </div>
+            <div className="grid gap-2">
+              <Label htmlFor="first-name">First name</Label>
+              <Input
+                onChange={(e) => handleInputChange(e, nameRef)}
+                id="first-name"
+                placeholder="Enter Your name"
+                required
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>

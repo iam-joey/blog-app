@@ -27,8 +27,7 @@ const authOptions: AuthOptions = {
             "https://backend.yerradarwin.workers.dev/auth/v1/user/signIn",
             data
           );
-          console.log("asdasdad", res);
-          console.log("response token", res.data.token);
+
           return res.data;
         } catch (error) {
           throw new Error(
